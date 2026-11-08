@@ -1,0 +1,17 @@
+{
+  "barttorvik": {
+    "url": "https://barttorvik.com/2024_super_sked.csv",
+    "status": "unreachable",
+    "detail": "HTTPSConnectionPool(host='barttorvik.com', port=443): Max retries exceeded with url: /2024_super_sked.csv (Caused by ProxyError('Unable to connect to proxy', OS"
+  },
+  "cbbdata_api": {
+    "url": "https://cbbdata.aweatherman.com",
+    "status": "unreachable",
+    "detail": "HTTPSConnectionPool(host='cbbdata.aweatherman.com', port=443): Max retries exceeded with url: / (Caused by ProxyError('Unable to connect to proxy', OSError('Tun"
+  },
+  "espn_scoreboard": {
+    "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240110&groups=50&limit=400",
+    "status": "unreachable",
+    "detail": "HTTPSConnectionPool(host='site.api.espn.com', port=443): Max retries exceeded with url: /apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates"
+  }
+}

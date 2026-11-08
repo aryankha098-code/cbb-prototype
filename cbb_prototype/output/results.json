@@ -1,0 +1,423 @@
+{
+  "data": {
+    "source_used": "hoopR-mbb-data (ESPN-derived box scores) from public GitHub, season 2023-24",
+    "source_urls": [
+      "https://raw.githubusercontent.com/sportsdataverse/hoopR-mbb-data/main/mbb/schedules/parquet/mbb_schedule_2024.parquet",
+      "https://raw.githubusercontent.com/sportsdataverse/hoopR-mbb-data/main/mbb/team_box/parquet/team_box_2024.parquet"
+    ],
+    "source_probe": {
+      "barttorvik": {
+        "url": "https://barttorvik.com/2024_super_sked.csv",
+        "status": "unreachable",
+        "detail": "HTTPSConnectionPool(host='barttorvik.com', port=443): Max retries exceeded with url: /2024_super_sked.csv (Caused by ProxyError('Unable to connect to proxy', OS"
+      },
+      "cbbdata_api": {
+        "url": "https://cbbdata.aweatherman.com",
+        "status": "unreachable",
+        "detail": "HTTPSConnectionPool(host='cbbdata.aweatherman.com', port=443): Max retries exceeded with url: / (Caused by ProxyError('Unable to connect to proxy', OSError('Tun"
+      },
+      "espn_scoreboard": {
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=20240110&groups=50&limit=400",
+        "status": "unreachable",
+        "detail": "HTTPSConnectionPool(host='site.api.espn.com', port=443): Max retries exceeded with url: /apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates"
+      }
+    },
+    "games_completed_in_schedule": 6243,
+    "games_with_box_scores": 6240,
+    "games_with_first_half_scores": 6240,
+    "date_min": "2023-11-06",
+    "date_max": "2024-04-08",
+    "neutral_site_games": 744,
+    "real_betting_lines_available": false,
+    "lines_note": "No free bulk historical closing lines for 2023-24 were found; none were invented."
+  },
+  "features": {
+    "games_in_feature_table": 4196,
+    "min_prior_games": 8,
+    "n_model_features": 22,
+    "date_min": "2023-12-10T00:00:00",
+    "date_max": "2024-04-08T00:00:00"
+  },
+  "metrics": {
+    "n_test_games": 3587,
+    "test_start": "2024-01-01T00:00:00",
+    "test_end": "2024-04-08T00:00:00",
+    "folds": [
+      {
+        "fold": 1,
+        "train_before": "2024-01-01",
+        "test_until": "2024-02-01",
+        "n_train": 609,
+        "n_test": 1386
+      },
+      {
+        "fold": 2,
+        "train_before": "2024-02-01",
+        "test_until": "2024-03-01",
+        "n_train": 1995,
+        "n_test": 1395
+      },
+      {
+        "fold": 3,
+        "train_before": "2024-03-01",
+        "test_until": "2024-05-01",
+        "n_train": 3390,
+        "n_test": 806
+      }
+    ],
+    "home_win_rate_test": 0.6021745190967382,
+    "ml": {
+      "A": {
+        "name": "Baseline A (always home)",
+        "accuracy": 0.6021745190967382,
+        "log_loss": 0.6759802138570442,
+        "brier": 0.2413310996022109
+      },
+      "B": {
+        "name": "Baseline B (rating formula)",
+        "accuracy": 0.6810705324783942,
+        "log_loss": 0.5940775598676116,
+        "brier": 0.2048789597866349
+      },
+      "tree": {
+        "name": "Decision tree (depth 3)",
+        "accuracy": 0.6626707555059939,
+        "log_loss": 0.6126426231585532,
+        "brier": 0.21067633378560222
+      },
+      "gbdt_raw": {
+        "name": "LightGBM (uncalibrated)",
+        "accuracy": 0.6651798160022303,
+        "log_loss": 0.608593699316938,
+        "brier": 0.20990039916724856
+      },
+      "gbdt": {
+        "name": "LightGBM (Platt-calibrated)",
+        "accuracy": 0.6601616950097574,
+        "log_loss": 0.6084808330524756,
+        "brier": 0.2110406155718633
+      }
+    },
+    "mae": {
+      "margin": {
+        "A": 10.71484630771862,
+        "B": 9.571011822766192,
+        "GBDT": 9.42652521335193,
+        "n": 3587
+      },
+      "total": {
+        "A": 14.628635438131996,
+        "B": 13.49837463656632,
+        "GBDT": 13.486243245445989,
+        "n": 3587
+      },
+      "h1_margin": {
+        "A": 7.836603566696481,
+        "B": 7.302244988501153,
+        "GBDT": 7.422007871254723,
+        "n": 3587
+      },
+      "h1_total": {
+        "A": 8.42253600204799,
+        "B": 7.936095311704814,
+        "GBDT": 8.031723344029363,
+        "n": 3587
+      }
+    },
+    "bootstrap": {
+      "log_loss_gbdt_minus_B": {
+        "mean_diff": 0.014403273184864208,
+        "ci95": [
+          0.005686290657695674,
+          0.022818460771777113
+        ],
+        "excludes_zero": true,
+        "lower_is_better": true
+      },
+      "accuracy_gbdt_minus_B": {
+        "mean_diff": -0.020908837468636744,
+        "ci95": [
+          -0.03429049344856426,
+          -0.008084750487872874
+        ],
+        "excludes_zero": true,
+        "lower_is_better": false
+      },
+      "mae_margin_gbdt_minus_B": {
+        "mean_diff": -0.1444866094142647,
+        "ci95": [
+          -0.26125120478606023,
+          -0.020792228179771697
+        ],
+        "excludes_zero": true,
+        "lower_is_better": true
+      },
+      "mae_total_gbdt_minus_B": {
+        "mean_diff": -0.012131391120329417,
+        "ci95": [
+          -0.17271842853491642,
+          0.162541128075141
+        ],
+        "excludes_zero": false,
+        "lower_is_better": true
+      },
+      "mae_h1_margin_gbdt_minus_B": {
+        "mean_diff": 0.1197628827535707,
+        "ci95": [
+          0.04647856170494649,
+          0.19511536901352072
+        ],
+        "excludes_zero": true,
+        "lower_is_better": true
+      },
+      "mae_h1_total_gbdt_minus_B": {
+        "mean_diff": 0.09562803232454875,
+        "ci95": [
+          -0.003488549720688238,
+          0.1892217047613395
+        ],
+        "excludes_zero": false,
+        "lower_is_better": true
+      },
+      "accuracy_gbdt_alone": {
+        "value": 0.6601616950097574,
+        "ci95": [
+          0.6445497630331753,
+          0.6766169500975745
+        ]
+      }
+    },
+    "per_fold": [
+      {
+        "fold": 1,
+        "n": 1386,
+        "start": "2024-01-01",
+        "end": "2024-02-01",
+        "acc_gbdt": 0.6471861471861472,
+        "acc_B": 0.6767676767676768,
+        "acc_A": 0.5995670995670995,
+        "ll_gbdt": 0.6316811104216133,
+        "ll_B": 0.6033839751038903,
+        "mae_margin_gbdt": 9.64952291729987,
+        "mae_margin_B": 9.709817805224755
+      },
+      {
+        "fold": 2,
+        "n": 1395,
+        "start": "2024-02-01",
+        "end": "2024-03-01",
+        "acc_gbdt": 0.6702508960573477,
+        "acc_B": 0.7003584229390681,
+        "acc_A": 0.6014336917562724,
+        "ll_gbdt": 0.5859438261001542,
+        "ll_B": 0.5793741760586452,
+        "mae_margin_gbdt": 9.406404277968882,
+        "mae_margin_B": 9.4984581770093
+      },
+      {
+        "fold": 3,
+        "n": 806,
+        "start": "2024-03-01",
+        "end": "2024-05-01",
+        "acc_gbdt": 0.6650124069478908,
+        "acc_B": 0.6550868486352357,
+        "acc_A": 0.607940446650124,
+        "ll_gbdt": 0.607591925192505,
+        "ll_B": 0.6035223848006459,
+        "mae_margin_gbdt": 9.077882393485304,
+        "mae_margin_B": 9.457894259668548
+      }
+    ],
+    "ece_uncalibrated": 0.05736173217541644,
+    "ece_calibrated": 0.05141582946485135,
+    "top_features_win_model": {
+      "Opponent-adjusted rating edge": 27.040561061034403,
+      "Efficiency-margin edge": 15.584862251700976,
+      "Offensive efficiency edge": 8.181644673536969,
+      "Last-10 average-margin edge": 4.505072877848674,
+      "Combined defensive efficiency": 4.252281068121763,
+      "Last-5 average-margin edge": 3.721948664401606,
+      "Combined offensive efficiency": 3.514066732842917,
+      "Last-5 win-rate edge": 2.9879494473116703
+    },
+    "top_features_margin_model": {
+      "Opponent-adjusted rating edge": 37.68759910132139,
+      "Efficiency-margin edge": 15.82036143785779,
+      "Offensive efficiency edge": 8.538197035243385,
+      "Last-10 average-margin edge": 6.625615168703998,
+      "Combined defensive efficiency": 3.3670642083824953,
+      "Opponent eFG% allowed difference": 3.030481917496902,
+      "Offensive-rebound rate edge": 2.7872559697405266,
+      "Combined offensive efficiency": 2.6005027144622748
+    },
+    "tree_rules": [
+      "IF Opponent-adjusted rating edge (home minus away) is at most -9.58 THEN home team wins 12% of the time (n=125 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between -9.58 and -5.92 THEN home team wins 30% of the time (n=314 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between -5.92 and -0.21 AND Efficiency-margin edge (home minus away) is at most -3.26 THEN home team wins 47% of the time (n=800 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between -5.92 and -0.21 AND Efficiency-margin edge (home minus away) is above -3.26 THEN home team wins 61% of the time (n=320 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between -0.21 and 3.80 AND Last-10 average-margin edge (home minus away) is at most 5.22 THEN home team wins 65% of the time (n=664 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between -0.21 and 3.80 AND Last-10 average-margin edge (home minus away) is above 5.22 THEN home team wins 77% of the time (n=266 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is between 3.80 and 6.83 THEN home team wins 82% of the time (n=508 training games)",
+      "IF Opponent-adjusted rating edge (home minus away) is above 6.83 THEN home team wins 94% of the time (n=393 training games)"
+    ],
+    "hyperparameters": "fixed, conservative LightGBM settings (num_leaves=8, lr=0.03, 200-250 trees); not tuned on test folds"
+  },
+  "backtest": {
+    "case": "B",
+    "message": "ROI could not be validated because free historical betting lines were not available; with the client's API access to closing lines, this is the first thing I would test.",
+    "label": "PROXY - NOT REAL MARKET RESULTS",
+    "proxy_definition": "Line = Baseline B's own prediction (rounded to 0.5). Bet LightGBM's side when it differs from that line by >= threshold points; 1 unit at -110. Measures disagreement with a simple formula, not edge against a sportsbook.",
+    "primary_threshold_pts": 2.0,
+    "break_even_win_rate": 0.5238095238095238,
+    "threshold_note": "Threshold fixed a priori at 2.0 (not tuned); all thresholds shown, none selected.",
+    "spread": {
+      "0.5": {
+        "n_bets": 3098,
+        "pushes": 64,
+        "win_rate": 0.5723047127178825,
+        "units": 286.81818181818187,
+        "roi_pct": 9.258172427959389,
+        "max_drawdown_units": 26.272727272727394
+      },
+      "1.0": {
+        "n_bets": 2731,
+        "pushes": 53,
+        "win_rate": 0.5796411570853167,
+        "units": 291.09090909090907,
+        "roi_pct": 10.658766352651375,
+        "max_drawdown_units": 18.090909090909264
+      },
+      "2.0": {
+        "n_bets": 1954,
+        "pushes": 39,
+        "win_rate": 0.5946775844421699,
+        "units": 264.3636363636364,
+        "roi_pct": 13.529357029868802,
+        "max_drawdown_units": 24.8181818181819,
+        "win_rate_ci95": [
+          0.572146878198567,
+          0.6161719549641761
+        ],
+        "roi_ci95_pct": [
+          9.228040383362798,
+          17.632827765888155
+        ],
+        "indistinguishable_from_breakeven": false
+      },
+      "3.0": {
+        "n_bets": 1405,
+        "pushes": 29,
+        "win_rate": 0.6142348754448399,
+        "units": 242.54545454545453,
+        "roi_pct": 17.263021675833063,
+        "max_drawdown_units": 13.818181818181841
+      },
+      "4.0": {
+        "n_bets": 946,
+        "pushes": 14,
+        "win_rate": 0.6183932346723044,
+        "units": 170.8181818181818,
+        "roi_pct": 18.056890255621756,
+        "max_drawdown_units": 9.000000000000028
+      }
+    },
+    "total": {
+      "0.5": {
+        "n_bets": 3284,
+        "pushes": 30,
+        "win_rate": 0.5596833130328868,
+        "units": 224.90909090909093,
+        "roi_pct": 6.848632488096556,
+        "max_drawdown_units": 19.636363636363768
+      },
+      "1.0": {
+        "n_bets": 3032,
+        "pushes": 28,
+        "win_rate": 0.566952506596306,
+        "units": 249.72727272727275,
+        "roi_pct": 8.236387622931158,
+        "max_drawdown_units": 16.54545454545459
+      },
+      "2.0": {
+        "n_bets": 2565,
+        "pushes": 23,
+        "win_rate": 0.5754385964912281,
+        "units": 252.8181818181818,
+        "roi_pct": 9.85645933014354,
+        "max_drawdown_units": 16.000000000000057,
+        "win_rate_ci95": [
+          0.5571150097465887,
+          0.5937621832358675
+        ],
+        "roi_ci95_pct": [
+          6.35832004253057,
+          13.354598617756514
+        ],
+        "indistinguishable_from_breakeven": false
+      },
+      "3.0": {
+        "n_bets": 2096,
+        "pushes": 19,
+        "win_rate": 0.5854007633587787,
+        "units": 246.45454545454544,
+        "roi_pct": 11.758327550312282,
+        "max_drawdown_units": 14.727272727272862
+      },
+      "4.0": {
+        "n_bets": 1689,
+        "pushes": 14,
+        "win_rate": 0.5926583777383067,
+        "units": 222.0,
+        "roi_pct": 13.143872113676732,
+        "max_drawdown_units": 11.909090909090935
+      }
+    },
+    "ats_ou_hit_rates": "not computed - requires real lines"
+  },
+  "card": {
+    "selection_rule": "highest combined pre-game opponent-adjusted rating among held-out, regular-season, non-neutral games",
+    "game": "Auburn at Tennessee",
+    "date": "2024-02-28T00:00:00",
+    "model_fold": 2,
+    "picks": {
+      "ml_team": "Tennessee",
+      "ml_prob": "53%",
+      "home_pct": 53,
+      "away_pct": 47,
+      "spread_full": "Tennessee -4.5",
+      "total_full": "149.5",
+      "spread_h1": "Tennessee -2.0",
+      "total_h1": "70.5"
+    },
+    "pregame_home_win_prob": 0.5268610767446656,
+    "layout_overflow_px": 0,
+    "outcome_not_shown_on_card": {
+      "final_home_margin": 8,
+      "ml_pick_correct": true
+    },
+    "drivers": [
+      {
+        "title": "Opponent-adjusted rating edge:",
+        "supports": false,
+        "detail": "Tennessee +14.3 vs Auburn +15.1. This works against the Tennessee pick."
+      },
+      {
+        "title": "Offensive efficiency edge:",
+        "supports": false,
+        "detail": "Tennessee 113.8 vs Auburn 117.1. This works against the Tennessee pick."
+      },
+      {
+        "title": "Combined defensive efficiency:",
+        "supports": true,
+        "detail": "189.7 (both teams' points allowed per 100 poss.). This supports the Tennessee pick."
+      }
+    ],
+    "disclaimer": "Quick sample built on one past season. Not betting advice. Results are backtested and do not guarantee future performance."
+  },
+  "summary": {
+    "word_count": 131
+  },
+  "tests": {
+    "all_passed": true
+  }
+}

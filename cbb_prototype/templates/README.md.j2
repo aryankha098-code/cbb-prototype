@@ -1,0 +1,159 @@
+# College basketball (CBB) game-prediction prototype
+
+> **SAMPLE - PROTOTYPE.** A quick, honest sample of my approach on **one past season (2023-24)**. It is not the final product and not betting advice.
+> Every number in this README, in `output/summary.md` and on the game card is generated from the code run (`output/results.json`).
+
+## What this is
+
+A small, reproducible pipeline that predicts, for college basketball games:
+
+- **Moneyline** - home win probability (calibrated)
+- **Spread** - predicted home margin
+- **Total (O/U)** - predicted combined points
+- the same **margin and total for the 1st half**
+
+plus a **game card** (HTML + shareable 1080x1350 PNG) showing the picks, last-10 form, head-to-head, a stats comparison and the model's top drivers.
+
+**Headline, honestly:** {{ headline }}
+
+## Data source actually used
+
+**{{ d.source_used }}** - the ESPN-derived game schedule and team box scores published in the public GitHub repo `sportsdataverse/hoopR-mbb-data`. Raw files are cached in `data/raw/`.
+
+I tried the preferred sources first. Results from this run (`data/raw/source_probe.json`):
+
+{{ t.probe }}
+
+Barttorvik, the cbbdata API and ESPN's scoreboard were all blocked in the environment this was built in, so the GitHub dataset (fallback b in the brief) is what the results come from. Consequences: ratings are **computed by me from box scores** (no Barttorvik adjusted efficiency), and possessions are the standard box-score estimate.
+
+- Games: {{ d.games_with_box_scores }} completed games with box scores ({{ d.date_min }} to {{ d.date_max }}); first-half scores available for {{ d.games_with_first_half_scores }} (taken from period scores and checked to add up to the final score); {{ d.neutral_site_games }} neutral-site games.
+- **Betting lines: none.** {{ d.lines_note }}
+
+## How to run
+
+```bash
+pip install -r requirements.txt
+python run_all.py            # data -> features -> models -> backtest -> card -> README -> tests -> notebook
+```
+
+- Python 3.11+ (built and run on 3.13). Seeds are fixed (`SEED = 42`); raw downloads are cached, with a delay between requests.
+- The PNG is rendered with Playwright. If its own Chromium is not installed, the code falls back to a system Chrome/Chromium; otherwise run `playwright install chromium`.
+- Flags: `--skip-notebook`, `--skip-tests`. Tests alone: `python -m pytest -q`.
+- **Have real closing lines?** Put `data/raw/lines.csv` with columns `game_id, spread_home (negative = home favoured), total` and re-run: the backtest switches to Case A (ATS / over-under hit rates and ROI, threshold picked on the January validation fold and evaluated on later months). That code path is only exercised by a unit test on synthetic data in this prototype.
+
+## Method in brief
+
+1. **No leakage.** Features for a game on date D use only games with date **before** D: cumulative team stats, an opponent-adjusted rating (ridge regression fitted on earlier games only) and league constants. Season-end ratings are never used. Games where either team has fewer than {{ f.min_prior_games }} prior games are skipped, leaving {{ f.games_in_feature_table }} games ({{ f.date_min[:10] }} to {{ f.date_max[:10] }}).
+2. **Proof.** `tests/test_leakage.py` checks that the latest date used per row is before the game date, that rebuilding features from data truncated at a cutoff reproduces the same features for earlier games, and that corrupting every future score changes nothing in the past.
+3. **Models.** Baseline A (always home / home-court margin), Baseline B (efficiency-margin difference x expected tempo + home court), LightGBM (win probability, margin, total, 1H margin, 1H total) and one depth-3 decision tree. Win probabilities are Platt-calibrated on a time-ordered slice of the training window. Hyper-parameters are fixed, conservative defaults and were not tuned on test data.
+4. **Validation.** Expanding-window walk-forward, never shuffled: train before Jan 1 / test Jan; train before Feb 1 / test Feb; train before Mar 1 / test Mar-Apr. All results below are on those {{ m.n_test_games }} held-out games only.
+
+## Results (held-out games only)
+
+### Moneyline (home-win probability)
+
+{{ t.ml }}
+
+Calibration error (ECE, 10 equal-count bins): {{ "%.3f"|format(m.ece_uncalibrated) }} uncalibrated, {{ "%.3f"|format(m.ece_calibrated) }} after Platt scaling.
+
+### Spread / total / 1st half (mean absolute error, points; lower is better)
+
+{{ t.mae }}
+
+### Is the difference real? LightGBM minus Baseline B (paired bootstrap, {{ 2000 }} resamples)
+
+{{ t.boot }}
+
+Games are resampled as if independent, which is only approximate (teams repeat and same-day games are correlated), so treat the intervals as indicative.
+
+### By fold
+
+{{ t.folds }}
+
+### Charts
+
+![Calibration](output/calibration.png)
+![Error by target](output/mae_comparison.png)
+![Feature importance](output/feature_importance.png)
+
+Top drivers of the win-probability model (final fold, share of split gain): {% for k, v in m.top_features_win_model.items() %}{{ k }} {{ "%.0f"|format(v) }}%{{ ", " if not loop.last }}{% endfor %}.
+
+### Plain-English decision tree (depth 3, fitted on games before Mar 1)
+
+```text
+{{ tree_rules }}
+```
+
+Tree held-out accuracy {{ pct(m.ml.tree.accuracy) }} / log loss {{ "%.4f"|format(m.ml.tree.log_loss) }} (all folds, each fold refit).
+
+## ROI backtest
+
+{% if b.case == "B" %}
+**Case B - no real lines. No real ROI is reported.**
+
+> {{ b.message }}
+
+ATS and over/under hit rates also require real lines, so they are not computed.
+
+For transparency only, I simulated flat 1-unit bets at -110 against a **proxy line = Baseline B's own number**. This is labelled **PROXY - NOT REAL MARKET RESULTS** and it does **not** measure edge against a sportsbook: Baseline B is a raw, unsmoothed formula, so a smoother model disagreeing with it says nothing about beating a market line that already prices in injuries, lineups and sharp money. Do not quote these figures as betting performance. The threshold was fixed in advance at {{ b.primary_threshold_pts }} points; all thresholds are shown and none was selected. Break-even win rate at -110 is {{ pct(b.break_even_win_rate, 2) }}.
+
+**Spread (proxy)**
+
+{{ t.proxy_spread }}
+
+**Total (proxy)**
+
+{{ t.proxy_total }}
+
+Bootstrap intervals at the {{ b.primary_threshold_pts }}-point threshold - {{ t.proxy_ci }}.
+
+![Proxy cumulative profit](output/proxy_cumulative_profit.png)
+{% else %}
+**Case A - real lines supplied.** See `output/results.json` -> `backtest` for ATS / over-under hit rates, ROI at several thresholds (chosen on the validation fold), max drawdown and bootstrap intervals.
+{% endif %}
+
+## Game card
+
+Built from a real held-out game using only pre-game information. Selection rule (fixed, not result-based): {{ c.selection_rule }}. Game: **{{ c.game }}**, {{ c.date[:10] }}, scored by the model trained only on earlier games.
+
+![Game card](output/game_card.png)
+
+For transparency, not shown on the card: the final home margin was {{ c.outcome_not_shown_on_card.final_home_margin }} and the moneyline pick was {{ "correct" if c.outcome_not_shown_on_card.ml_pick_correct else "incorrect" }}. One game proves nothing; the card is a demo of the UI. Its "drivers" list the largest contributions to the uncalibrated model and can include factors that cut against the pick.
+
+`output/game_card.html` is self-contained (inline CSS, no CDN) so it renders identically offline.
+
+## Limitations
+
+- **One season, small samples.** {{ m.n_test_games }} held-out games; one fold has only {{ m.per_fold[-1].n }}. Intervals are wide for anything fine-grained.
+- **Did not beat a simple formula everywhere.** See the paired-bootstrap table above; the main model's value here is the process and pipeline, not a demonstrated edge.
+- **No injuries or lineups, no line movement, no real market lines.** These are the biggest gaps versus a sportsbook.
+- **Overfitting risk.** {{ f.n_model_features }} features and a few thousand training games per fold. Hyper-parameters were fixed, not tuned; with tuning, take care to tune on validation data only.
+- **Data caveats.** ESPN-derived box scores (not Barttorvik); estimated possessions; early-season games against non-D1 teams are noisy, so as-of league constants are noisier in December (they are computed over eligible games only); ESPN's "home" label on neutral-site games is arbitrary, so home-court is zeroed for them.
+- **First-half baselines are rough.** Baseline B's 1st-half numbers are scaled from its full-game numbers (assumption), not fitted.
+- **Proxy ROI is not a result.** See above.
+- **Bootstrap treats games as independent.**
+
+## How I'd extend this for your project
+
+- **Lines:** pull historical closing spreads/totals/moneylines via your API access (e.g. the CFBData college-basketball API) and run the Case A backtest first - thresholds chosen on a validation window, ROI reported with intervals.
+- **Better ratings:** add Evan Miya-style (lineup/possession-adjusted) ratings as as-of features.
+- **Lineups and injuries:** minutes-weighted, lineup-based features and availability flags.
+- **1st-half models:** fit them on their own features (early-game pace, 1H shooting) instead of reusing full-game ones; add a 1H moneyline.
+- **More data:** several seasons, rolling-season training, proper hyper-parameter tuning on validation windows, probability calibration per fold.
+- **Deployment:** Supabase (storage + scheduled jobs) -> API on Render -> card UI on Vercel; nightly pull, predict and card render.
+- **Monitoring:** weekly tracking of calibration, log loss, MAE and (with real lines) CLV/ROI, plus a data-drift check, with alerts when metrics degrade.
+
+## Project layout
+
+```text
+src/            data.py  features.py  models.py  backtest.py  card.py  report.py  notebook.py  config.py
+notebooks/      analysis.ipynb  (executed walkthrough)
+templates/      card.html.j2  README.md.j2
+tests/          test_leakage.py  test_metrics.py
+data/raw        cached downloads        data/processed   games / features / predictions
+output/         game_card.png  game_card.html  charts  results.json  summary.md  decision_tree_rules.txt
+```
+
+## Summary for a proposal ({{ words }} words, generated from this run)
+
+> {{ summary }}

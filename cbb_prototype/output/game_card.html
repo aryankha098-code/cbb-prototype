@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Auburn at Tennessee - model card (sample)</title>
+<style>
+  /* Self-contained: no CDN, no external fonts, so the PNG renders identically offline. */
+  :root{
+    --surface:#fcfcfb; --page:#f9f9f7; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --grid:#e1e0d9;
+    --home:#2a78d6; --away:#eb6834; --good:#006300; --bad:#d03b3b; --dark:#14213d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:var(--page);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .card{width:1080px;height:1350px;display:flex;flex-direction:column;background:var(--surface);overflow:hidden}
+  .hdr{background:var(--dark);color:#fff;padding:26px 44px 24px}
+  .hdr-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#c9d1e6}
+  .badge{border:2px solid #ffb089;color:#ffb089;border-radius:999px;padding:5px 16px;font-weight:700;letter-spacing:.12em;font-size:14px}
+  .teams{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+  .team{display:flex;align-items:center;gap:14px;font-size:50px;font-weight:800;letter-spacing:-.01em;line-height:1.05}
+  .dot{width:18px;height:18px;border-radius:50%;flex:none}
+  .at{font-size:22px;color:#c9d1e6;font-weight:600}
+  .meta{margin-top:12px;font-size:17px;color:#c9d1e6;display:flex;gap:22px}
+  .body{padding:18px 44px 0;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0}
+  h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700;margin-bottom:8px}
+  /* picks */
+  table.picks{width:100%;border-collapse:collapse;font-size:20px}
+  .picks th{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:0 0 6px}
+  .picks td{padding:8px 0;border-top:1px solid var(--grid);vertical-align:middle}
+  .picks td.lbl{color:var(--ink2);font-weight:600;width:150px}
+  .picks .big{font-weight:800;font-size:25px}
+  .picks .sub{color:var(--muted);font-size:14px;font-weight:500;margin-left:8px}
+  .picks .na{color:var(--muted);font-size:16px}
+  .probbar{display:flex;height:9px;border-radius:5px;overflow:hidden;width:230px;margin-top:5px;gap:2px}
+  .probbar i{display:block;height:100%}
+  .note{font-size:13px;color:var(--muted);margin-top:6px}
+  /* last 10 */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+  .colhead{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;margin-bottom:5px}
+  .colhead .dot{width:12px;height:12px}
+  .g{display:grid;grid-template-columns:28px 78px 1fr 30px;align-items:center;font-size:15px;height:22px;border-top:1px solid var(--grid)}
+  .g .r{font-weight:800}.g .W{color:var(--good)}.g .L{color:var(--bad)}
+  .g .o{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
+  .g .l{color:var(--muted);text-align:right;font-size:13px}
+  .h2h{font-size:15px;color:var(--ink2);margin-top:8px;border-top:1px solid var(--grid);padding-top:7px}
+  /* stats */
+  .s{display:grid;grid-template-columns:1fr 168px 1fr;align-items:center;height:33px;border-top:1px solid var(--grid)}
+  .side{display:flex;align-items:center;gap:10px}
+  .side.h{justify-content:flex-end}
+  .bar{height:15px;border-radius:4px;flex:none}
+  .val{font-size:17px;font-weight:600;min-width:62px;color:var(--ink2)}
+  .val.h{text-align:right}.val.best{color:var(--ink);font-weight:800}
+  .slabel{text-align:center;font-size:14px;font-weight:700;color:var(--ink2)}
+  /* why */
+  ul.why{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .why li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;font-size:16px;line-height:1.3}
+  .why .n{width:28px;height:28px;border-radius:50%;background:var(--dark);color:#fff;font-weight:800;text-align:center;line-height:28px;font-size:15px}
+  .why b{font-weight:800}.why .t{color:var(--ink2)}
+  .ftr{margin-top:auto;background:var(--dark);color:#c9d1e6;font-size:14px;line-height:1.35;padding:13px 44px;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div class="hdr-top"><span>College Basketball &middot; Model Card</span><span class="badge">SAMPLE - PROTOTYPE</span></div>
+    <div class="teams">
+      <div class="team"><span class="dot" style="background:var(--away)"></span>Auburn</div>
+      <div class="at">at</div>
+      <div class="team">Tennessee<span class="dot" style="background:var(--home)"></span></div>
+    </div>
+    <div class="meta"><span>Wednesday, February 28, 2024</span><span>Home game for Tennessee</span><span>Pre-game information only</span></div>
+  </div>
+
+  <div class="body">
+    <section>
+      <h2>Model picks</h2>
+      <table class="picks">
+        <tr><th></th><th>Full game</th><th>1st half</th><th>Market line</th></tr>
+        <tr>
+          <td class="lbl">Moneyline</td>
+          <td><span class="big">Tennessee</span><span class="sub">53% win prob.</span>
+            <div class="probbar"><i style="width:53%;background:var(--home)"></i><i style="width:47%;background:var(--away)"></i></div></td>
+          <td class="na">not modeled</td><td class="na">n/a</td>
+        </tr>
+        <tr>
+          <td class="lbl">Spread</td>
+          <td><span class="big">Tennessee -4.5</span></td>
+          <td><span class="big">Tennessee -2.0</span></td><td class="na">n/a</td>
+        </tr>
+        <tr>
+          <td class="lbl">Total (O/U)</td>
+          <td><span class="big">149.5</span><span class="sub">model total</span></td>
+          <td><span class="big">70.5</span><span class="sub">model total</span></td><td class="na">n/a</td>
+        </tr>
+      </table>
+      <div class="note">No free historical closing lines were available, so no market line is shown. Moneyline probability is calibrated; spread and totals are the model's own numbers.</div>
+    </section>
+
+    <section>
+      <h2>Last 10 games (most recent first) &amp; head-to-head this season</h2>
+      <div class="two">
+        
+        <div>
+          <div class="colhead"><span class="dot" style="background:var(--away)"></span>Auburn</div>
+          
+          <div class="g"><span class="r W">W</span><span>97-76</span><span class="o">Georgia</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>59-70</span><span class="o">Kentucky</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>101-61</span><span class="o">South Carolina</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>65-81</span><span class="o">Florida</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>99-81</span><span class="o">Alabama</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>91-77</span><span class="o">Ole Miss</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>81-54</span><span class="o">Vanderbilt</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>58-64</span><span class="o">Mississippi St.</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>75-79</span><span class="o">Alabama</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>82-59</span><span class="o">Ole Miss</span><span class="l">H</span></div>
+          
+        </div>
+        
+        <div>
+          <div class="colhead"><span class="dot" style="background:var(--home)"></span>Tennessee</div>
+          
+          <div class="g"><span class="r W">W</span><span>86-51</span><span class="o">Texas A&amp;M</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>72-67</span><span class="o">Missouri</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>88-53</span><span class="o">Vanderbilt</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>92-63</span><span class="o">Arkansas</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>69-85</span><span class="o">Texas A&amp;M</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>88-68</span><span class="o">LSU</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>103-92</span><span class="o">Kentucky</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r L">L</span><span>59-63</span><span class="o">South Carolina</span><span class="l">H</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>75-62</span><span class="o">Vanderbilt</span><span class="l">A</span></div>
+          
+          <div class="g"><span class="r W">W</span><span>91-71</span><span class="o">Alabama</span><span class="l">H</span></div>
+          
+        </div>
+        
+      </div>
+      <div class="h2h">Head-to-head: no earlier meeting this season.</div>
+    </section>
+
+    <section>
+      <h2>Stats comparison (season to date, before this game)</h2>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">113.8</span><span class="bar" style="width:224px;background:var(--home);opacity:0.45"></span></div>
+        <div class="slabel">Offensive efficiency</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:1"></span><span class="val best">117.1</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h best">94.3</span><span class="bar" style="width:228px;background:var(--home);opacity:1"></span></div>
+        <div class="slabel">Defensive efficiency</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:0.45"></span><span class="val ">95.3</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">70.5</span><span class="bar" style="width:230px;background:var(--home);opacity:1"></span></div>
+        <div class="slabel">Tempo (poss/40)</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:1"></span><span class="val ">70.6</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">52.6%</span><span class="bar" style="width:226px;background:var(--home);opacity:0.45"></span></div>
+        <div class="slabel">eFG%</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:1"></span><span class="val best">53.4%</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">12.7%</span><span class="bar" style="width:230px;background:var(--home);opacity:0.45"></span></div>
+        <div class="slabel">Turnover rate</div>
+        <div class="side"><span class="bar" style="width:229px;background:var(--away);opacity:1"></span><span class="val best">12.6%</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">32.8%</span><span class="bar" style="width:223px;background:var(--home);opacity:0.45"></span></div>
+        <div class="slabel">Off. rebound rate</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:1"></span><span class="val best">33.9%</span></div>
+      </div>
+      
+      <div class="s">
+        <div class="side h"><span class="val h ">33.7%</span><span class="bar" style="width:202px;background:var(--home);opacity:0.45"></span></div>
+        <div class="slabel">Free-throw rate</div>
+        <div class="side"><span class="bar" style="width:230px;background:var(--away);opacity:1"></span><span class="val best">38.3%</span></div>
+      </div>
+      
+      <div class="note">Brighter bar = better on that stat (lower is better for defensive efficiency and turnover rate). Tempo is style, not quality.</div>
+    </section>
+
+    <section>
+      <h2>Why the model likes this pick (and what cuts against it)</h2>
+      <ul class="why">
+        
+        <li><span class="n">1</span><div><b>Opponent-adjusted rating edge:</b> <span class="t">Tennessee +14.3 vs Auburn +15.1. This works against the Tennessee pick.</span></div></li>
+        
+        <li><span class="n">2</span><div><b>Offensive efficiency edge:</b> <span class="t">Tennessee 113.8 vs Auburn 117.1. This works against the Tennessee pick.</span></div></li>
+        
+        <li><span class="n">3</span><div><b>Combined defensive efficiency:</b> <span class="t">189.7 (both teams&#39; points allowed per 100 poss.). This supports the Tennessee pick.</span></div></li>
+        
+      </ul>
+      <div class="note">Low-confidence pick (53%): treat as a lean, not a strong call. Drivers show the largest contributions to the uncalibrated model, including ones that cut against the pick.</div>
+    </section>
+  </div>
+
+  <div class="ftr">Quick sample built on one past season. Not betting advice. Results are backtested and do not guarantee future performance.</div>
+</div>
+</body>
+</html>

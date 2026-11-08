@@ -1,0 +1,11 @@
+Decision tree (max_depth=3) fitted on 3390 games before 2024-03-01.
+'Edge' = home team minus away team; efficiency in points per 100 possessions.
+
+IF Opponent-adjusted rating edge (home minus away) is at most -9.58 THEN home team wins 12% of the time (n=125 training games)
+IF Opponent-adjusted rating edge (home minus away) is between -9.58 and -5.92 THEN home team wins 30% of the time (n=314 training games)
+IF Opponent-adjusted rating edge (home minus away) is between -5.92 and -0.21 AND Efficiency-margin edge (home minus away) is at most -3.26 THEN home team wins 47% of the time (n=800 training games)
+IF Opponent-adjusted rating edge (home minus away) is between -5.92 and -0.21 AND Efficiency-margin edge (home minus away) is above -3.26 THEN home team wins 61% of the time (n=320 training games)
+IF Opponent-adjusted rating edge (home minus away) is between -0.21 and 3.80 AND Last-10 average-margin edge (home minus away) is at most 5.22 THEN home team wins 65% of the time (n=664 training games)
+IF Opponent-adjusted rating edge (home minus away) is between -0.21 and 3.80 AND Last-10 average-margin edge (home minus away) is above 5.22 THEN home team wins 77% of the time (n=266 training games)
+IF Opponent-adjusted rating edge (home minus away) is between 3.80 and 6.83 THEN home team wins 82% of the time (n=508 training games)
+IF Opponent-adjusted rating edge (home minus away) is above 6.83 THEN home team wins 94% of the time (n=393 training games)

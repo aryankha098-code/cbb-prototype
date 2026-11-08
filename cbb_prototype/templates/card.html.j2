@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>{{ c.away }} at {{ c.home }} - model card (sample)</title>
+<style>
+  /* Self-contained: no CDN, no external fonts, so the PNG renders identically offline. */
+  :root{
+    --surface:#fcfcfb; --page:#f9f9f7; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --grid:#e1e0d9;
+    --home:#2a78d6; --away:#eb6834; --good:#006300; --bad:#d03b3b; --dark:#14213d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:var(--page);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .card{width:1080px;height:1350px;display:flex;flex-direction:column;background:var(--surface);overflow:hidden}
+  .hdr{background:var(--dark);color:#fff;padding:26px 44px 24px}
+  .hdr-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#c9d1e6}
+  .badge{border:2px solid #ffb089;color:#ffb089;border-radius:999px;padding:5px 16px;font-weight:700;letter-spacing:.12em;font-size:14px}
+  .teams{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+  .team{display:flex;align-items:center;gap:14px;font-size:50px;font-weight:800;letter-spacing:-.01em;line-height:1.05}
+  .dot{width:18px;height:18px;border-radius:50%;flex:none}
+  .at{font-size:22px;color:#c9d1e6;font-weight:600}
+  .meta{margin-top:12px;font-size:17px;color:#c9d1e6;display:flex;gap:22px}
+  .body{padding:18px 44px 0;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0}
+  h2{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);font-weight:700;margin-bottom:8px}
+  /* picks */
+  table.picks{width:100%;border-collapse:collapse;font-size:20px}
+  .picks th{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:0 0 6px}
+  .picks td{padding:8px 0;border-top:1px solid var(--grid);vertical-align:middle}
+  .picks td.lbl{color:var(--ink2);font-weight:600;width:150px}
+  .picks .big{font-weight:800;font-size:25px}
+  .picks .sub{color:var(--muted);font-size:14px;font-weight:500;margin-left:8px}
+  .picks .na{color:var(--muted);font-size:16px}
+  .probbar{display:flex;height:9px;border-radius:5px;overflow:hidden;width:230px;margin-top:5px;gap:2px}
+  .probbar i{display:block;height:100%}
+  .note{font-size:13px;color:var(--muted);margin-top:6px}
+  /* last 10 */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+  .colhead{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;margin-bottom:5px}
+  .colhead .dot{width:12px;height:12px}
+  .g{display:grid;grid-template-columns:28px 78px 1fr 30px;align-items:center;font-size:15px;height:22px;border-top:1px solid var(--grid)}
+  .g .r{font-weight:800}.g .W{color:var(--good)}.g .L{color:var(--bad)}
+  .g .o{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink2)}
+  .g .l{color:var(--muted);text-align:right;font-size:13px}
+  .h2h{font-size:15px;color:var(--ink2);margin-top:8px;border-top:1px solid var(--grid);padding-top:7px}
+  /* stats */
+  .s{display:grid;grid-template-columns:1fr 168px 1fr;align-items:center;height:33px;border-top:1px solid var(--grid)}
+  .side{display:flex;align-items:center;gap:10px}
+  .side.h{justify-content:flex-end}
+  .bar{height:15px;border-radius:4px;flex:none}
+  .val{font-size:17px;font-weight:600;min-width:62px;color:var(--ink2)}
+  .val.h{text-align:right}.val.best{color:var(--ink);font-weight:800}
+  .slabel{text-align:center;font-size:14px;font-weight:700;color:var(--ink2)}
+  /* why */
+  ul.why{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .why li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;font-size:16px;line-height:1.3}
+  .why .n{width:28px;height:28px;border-radius:50%;background:var(--dark);color:#fff;font-weight:800;text-align:center;line-height:28px;font-size:15px}
+  .why b{font-weight:800}.why .t{color:var(--ink2)}
+  .ftr{margin-top:auto;background:var(--dark);color:#c9d1e6;font-size:14px;line-height:1.35;padding:13px 44px;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div class="hdr-top"><span>College Basketball &middot; Model Card</span><span class="badge">SAMPLE - PROTOTYPE</span></div>
+    <div class="teams">
+      <div class="team"><span class="dot" style="background:var(--away)"></span>{{ c.away }}</div>
+      <div class="at">{{ "vs" if c.neutral else "at" }}</div>
+      <div class="team">{{ c.home }}<span class="dot" style="background:var(--home)"></span></div>
+    </div>
+    <div class="meta"><span>{{ c.date_str }}</span><span>{{ c.venue_line }}</span><span>Pre-game information only</span></div>
+  </div>
+
+  <div class="body">
+    <section>
+      <h2>Model picks</h2>
+      <table class="picks">
+        <tr><th></th><th>Full game</th><th>1st half</th><th>Market line</th></tr>
+        <tr>
+          <td class="lbl">Moneyline</td>
+          <td><span class="big">{{ c.picks.ml_team }}</span><span class="sub">{{ c.picks.ml_prob }} win prob.</span>
+            <div class="probbar"><i style="width:{{ c.picks.home_pct }}%;background:var(--home)"></i><i style="width:{{ c.picks.away_pct }}%;background:var(--away)"></i></div></td>
+          <td class="na">not modeled</td><td class="na">n/a</td>
+        </tr>
+        <tr>
+          <td class="lbl">Spread</td>
+          <td><span class="big">{{ c.picks.spread_full }}</span></td>
+          <td><span class="big">{{ c.picks.spread_h1 }}</span></td><td class="na">n/a</td>
+        </tr>
+        <tr>
+          <td class="lbl">Total (O/U)</td>
+          <td><span class="big">{{ c.picks.total_full }}</span><span class="sub">model total</span></td>
+          <td><span class="big">{{ c.picks.total_h1 }}</span><span class="sub">model total</span></td><td class="na">n/a</td>
+        </tr>
+      </table>
+      <div class="note">No free historical closing lines were available, so no market line is shown. Moneyline probability is calibrated; spread and totals are the model's own numbers.</div>
+    </section>
+
+    <section>
+      <h2>Last 10 games (most recent first) &amp; head-to-head this season</h2>
+      <div class="two">
+        {% for side in (c.last10.away, c.last10.home) %}
+        <div>
+          <div class="colhead"><span class="dot" style="background:var({{ '--away' if loop.first else '--home' }})"></span>{{ side.name }}</div>
+          {% for g in side.rows %}
+          <div class="g"><span class="r {{ g.res }}">{{ g.res }}</span><span>{{ g.score }}</span><span class="o">{{ g.opp }}</span><span class="l">{{ g.loc }}</span></div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="h2h">{{ c.h2h }}</div>
+    </section>
+
+    <section>
+      <h2>Stats comparison (season to date, before this game)</h2>
+      {% for s in c.stats %}
+      <div class="s">
+        <div class="side h"><span class="val h {{ 'best' if s.h_best }}">{{ s.hv }}</span><span class="bar" style="width:{{ s.hw }}px;background:var(--home);opacity:{{ 1 if s.h_best or s.neutral else 0.45 }}"></span></div>
+        <div class="slabel">{{ s.label }}</div>
+        <div class="side"><span class="bar" style="width:{{ s.aw }}px;background:var(--away);opacity:{{ 1 if s.a_best or s.neutral else 0.45 }}"></span><span class="val {{ 'best' if s.a_best }}">{{ s.av }}</span></div>
+      </div>
+      {% endfor %}
+      <div class="note">Brighter bar = better on that stat (lower is better for defensive efficiency and turnover rate). Tempo is style, not quality.</div>
+    </section>
+
+    <section>
+      <h2>Why the model likes this pick (and what cuts against it)</h2>
+      <ul class="why">
+        {% for d in c.drivers %}
+        <li><span class="n">{{ loop.index }}</span><div><b>{{ d.title }}</b> <span class="t">{{ d.detail }}</span></div></li>
+        {% endfor %}
+      </ul>
+      {% if c.confidence_note %}<div class="note">{{ c.confidence_note }} Drivers show the largest contributions to the uncalibrated model, including ones that cut against the pick.</div>{% endif %}
+    </section>
+  </div>
+
+  <div class="ftr">Quick sample built on one past season. Not betting advice. Results are backtested and do not guarantee future performance.</div>
+</div>
+</body>
+</html>
