@@ -151,7 +151,6 @@ For transparency only, I simulated flat 1-unit bets at -110 against a **proxy li
 
 Bootstrap intervals at the 2.0-point threshold - spread: win rate 59.5% (95% CI 57.2% to 61.6%), ROI +13.5% (95% CI +9.2% to +17.6%); total: win rate 57.5% (95% CI 55.7% to 59.4%), ROI +9.9% (95% CI +6.4% to +13.4%).
 
-![Proxy cumulative profit](output/proxy_cumulative_profit.png)
 
 ## Game card
 
