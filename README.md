@@ -98,9 +98,9 @@ Games are resampled as if independent, which is only approximate (teams repeat a
 
 ### Charts
 
-![Calibration](output/calibration.png)
-![Error by target](output/mae_comparison.png)
-![Feature importance](output/feature_importance.png)
+<img width="1080" height="630" alt="mae_comparison" src="https://github.com/user-attachments/assets/5ee8bc0e-25d5-4cc0-bc74-dfa0eb8ff8f6" />
+<img width="840" height="780" alt="calibration" src="https://github.com/user-attachments/assets/39d47526-040d-44a4-abe7-ffbb024bd69e" />
+
 
 Top drivers of the win-probability model (final fold, share of split gain): Opponent-adjusted rating edge 27%, Efficiency-margin edge 16%, Offensive efficiency edge 8%, Last-10 average-margin edge 5%, Combined defensive efficiency 4%, Last-5 average-margin edge 4%, Combined offensive efficiency 4%, Last-5 win-rate edge 3%.
 
@@ -157,7 +157,8 @@ Bootstrap intervals at the 2.0-point threshold - spread: win rate 59.5% (95% CI 
 
 Built from a real held-out game using only pre-game information. Selection rule (fixed, not result-based): highest combined pre-game opponent-adjusted rating among held-out, regular-season, non-neutral games. Game: **Auburn at Tennessee**, 2024-02-28, scored by the model trained only on earlier games.
 
-![Game card](output/game_card.png)
+<img width="1080" height="1350" alt="game_card" src="https://github.com/user-attachments/assets/4592eba5-3141-49fe-b041-bdbde1678afe" />
+
 
 For transparency, not shown on the card: the final home margin was 8 and the moneyline pick was correct. One game proves nothing; the card is a demo of the UI. Its "drivers" list the largest contributions to the uncalibrated model and can include factors that cut against the pick.
 
